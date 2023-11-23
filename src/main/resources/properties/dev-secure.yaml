@@ -1,0 +1,9 @@
+accounts-papi:
+ client_id: "![dpgP2g8MHNupgF1NzrWI/AUpD9U9B6SkJ6mdEIpVcHybRxq2xxMiF/TmoooflYvL]"
+ client_secret:  "![35VKQ5ioXSNV1v0J2qhv05SVVDUsPfDGPgfz6XJNMtVf0DBdiImPXkilcDbaZtNO]"
+ 
+accounts-sfdc-sys-api:
+ client_id: "![ZJPQgZ33+aBqKraVFQzNxDhPOllNdpOKAReQi2GrJXHjAMo03BTbCRkSryUKL4kK]"
+ client_secret:  "![ybg1rxDbVOgNdPsAr0sbnV0vU9DaVb4x96PK0zi5Cc8V02a45zawaGHUyh6E+oGZ]"
+ 
+ 

@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core"
+	xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd">
+	
+	<sub-flow name="post-sf-accountsSub_Flow" doc:id="945ec296-52a8-450f-9942-b9a089392f6b" >
+		<logger level="INFO" doc:name="log-beforeRequest" doc:id="cc361bf4-5b5a-4d19-b20f-b482b7add391" message='#[%dw 2.0&#10;output application/json&#10;---&#10;{&#10;	"log-trace" : "beforeRequest_post-accounts-PAPI",&#10;	"correlationId": vars.correlationId,&#10;	"payload": payload default""&#10;}]'/>
+		<http:request method="POST" doc:name="accounts-papi" doc:id="cc43b25f-2b47-41ec-9249-5fb20abfeee0" config-ref="HTTP_Req_accounts_papi" path="${accounts_papi.path}" responseTimeout="${accounts_papi.responsetimeout}">
+			<http:headers ><![CDATA[#[%dw 2.0
+output application/json
+---
+{
+   "client_id": p('secure::accounts-papi.client_id'),
+   "client_secret": p('secure::accounts-papi.client_secret'),   
+   "x-correlation-Id": vars.correlationId
+}]]]></http:headers>
+		</http:request>
+		<ee:transform doc:name="response" doc:id="aabc60ee-05e1-4917-aacb-c2ce60d62251" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+payload]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+		<logger level="INFO" doc:name="log-afterRequest" doc:id="396ee83d-8998-4c88-9f76-7d34c1e050b0" message='#[%dw 2.0&#10;output application/json&#10;---&#10;{&#10;	"log-trace" : "afterRequest_post-accounts-PAPI",&#10;	"correlationId": vars.correlationId,&#10;	"payload": payload default""&#10;}]'/>
+	</sub-flow>
+</mule>

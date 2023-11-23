@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mule xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:apikit="http://www.mulesoft.org/schema/mule/mule-apikit" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd http://www.mulesoft.org/schema/mule/mule-apikit http://www.mulesoft.org/schema/mule/mule-apikit/current/mule-apikit.xsd http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd ">
+    
+    <flow name="mobile-accounts-eapi-main">
+        <http:listener config-ref="mobile-accounts-eapi-httpListenerConfig" path="${api.basepath}">
+            <http:response statusCode="#[vars.httpStatus default 200]">
+                <http:headers><![CDATA[#[vars.outboundHeaders default {}]]]></http:headers>
+            </http:response>
+            <http:error-response statusCode="#[vars.httpStatus default 500]">
+                <http:body><![CDATA[#[payload]]]></http:body>
+                <http:headers><![CDATA[#[vars.outboundHeaders default {}]]]></http:headers>
+            </http:error-response>
+        </http:listener>
+        <set-variable value="#[attributes.headers.correlationId default correlationId]" doc:name="correlationId" doc:id="12b6bfad-da84-4436-b780-6bcedf3cd4a0" variableName="correlationId"/>
+		<apikit:router config-ref="mobile-accounts-eapi-config" />
+		<error-handler ref="apikit-error-handler" />
+    </flow>
+    <flow name="mobile-accounts-eapi-console">
+        <http:listener config-ref="mobile-accounts-eapi-httpListenerConfig" path="/console/*">
+            <http:response statusCode="#[vars.httpStatus default 200]">
+                <http:headers>#[vars.outboundHeaders default {}]</http:headers>
+            </http:response>
+            <http:error-response statusCode="#[vars.httpStatus default 500]">
+                <http:body>#[payload]</http:body>
+                <http:headers>#[vars.outboundHeaders default {}]</http:headers>
+            </http:error-response>
+        </http:listener>
+        <apikit:console config-ref="mobile-accounts-eapi-config" />
+        <error-handler>
+            <on-error-propagate type="APIKIT:NOT_FOUND">
+                <ee:transform doc:name="Transform Message">
+                    <ee:message>
+                        <ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+{message: "Resource not found"}]]></ee:set-payload>
+                    </ee:message>
+                    <ee:variables>
+                        <ee:set-variable variableName="httpStatus">404</ee:set-variable>
+                    </ee:variables>
+                </ee:transform>
+            </on-error-propagate>
+        </error-handler>
+    </flow>
+    <flow name="get:\accounts:mobile-accounts-eapi-config">
+        <flow-ref doc:name="common-variablesSub_Flow" doc:id="91e0f1fb-a693-4fe6-8fd8-3767e2352cf6" name="common-variablesSub_Flow"/>
+		<logger level="INFO" doc:name="log-start" doc:id="eda48706-255f-4032-879b-144410542cb7" message='#[%dw 2.0&#10;output application/json&#10;---&#10;{&#10; "log-trace" : "START_postaccountsFlow",&#10; "correlationId": vars.correlationId,&#10; "payload": payload default""&#10;}]'/>
+		<flow-ref doc:name="get-sf-accountsSub_Flow" doc:id="e222b22f-dcf9-40b0-b270-e05117f2d2eb" name="get-sf-accountsSub_Flow"/>
+		<logger level="INFO" doc:name="log-end" doc:id="124bd317-2e6f-416f-81a5-36e1c1c6d9b8" message='#[%dw 2.0&#10;output application/json&#10;---&#10;{&#10; "log-trace" : "END_postaccountsFlow",&#10; "correlationId": vars.correlationId,&#10; "payload": payload default""&#10;}]'/>
+    </flow>
+    <flow name="post:\accounts:application\json:mobile-accounts-eapi-config">
+        <flow-ref doc:name="common-variablesSub_Flow" doc:id="faa85486-013a-4f75-a968-b3e12a83148b" name="common-variablesSub_Flow"/>
+		<logger level="INFO" doc:name="log-start" doc:id="46ba6f44-5898-4e74-a80a-3e0c450526d6" message='#[%dw 2.0&#10;output application/json&#10;---&#10;{&#10; "log-trace" : "START_postaccountsFlow",&#10; "correlationId": vars.correlationId,&#10; "payload": payload default""&#10;}]'/>
+		<flow-ref doc:name="post-sf-accountsSub_Flow" doc:id="c3dd7b20-f954-4fdc-a216-330c72bda90e" name="post-sf-accountsSub_Flow"/>
+		<logger level="INFO" doc:name="log-end" doc:id="68a758b6-6cc2-4216-a387-226d1cabbd86" message='#[%dw 2.0&#10;output application/json&#10;---&#10;{&#10; "log-trace" : "END_postaccountsFlow",&#10; "correlationId": vars.correlationId,&#10; "payload": payload default""&#10;}]'/>
+    </flow>
+</mule>

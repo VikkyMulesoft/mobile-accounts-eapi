@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:munit="http://www.mulesoft.org/schema/mule/munit" xmlns:munit-tools="http://www.mulesoft.org/schema/mule/munit-tools"
+	xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+	xsi:schemaLocation="
+		http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+		http://www.mulesoft.org/schema/mule/munit http://www.mulesoft.org/schema/mule/munit/current/mule-munit.xsd
+		http://www.mulesoft.org/schema/mule/munit-tools  http://www.mulesoft.org/schema/mule/munit-tools/current/mule-munit-tools.xsd">
+	<munit:config name="api-main-test-suite.xml" />
+	<munit:test name="api-main-test-suite-post:\accounts:application\json:mobile-accounts-successTest" doc:id="cd31981c-8928-4b2b-b155-104264940c21" description="Test">
+		<munit:behavior >
+			<munit-tools:mock-when doc:name="Mock when" doc:id="bff732bb-c79c-4aee-908d-a2d8c7916541" processor="http:request">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="POST" attributeName="method" />
+					<munit-tools:with-attribute whereValue="accounts-papi" attributeName="doc:name" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:payload value="#[MunitTools::getResourceAsString('responses/postAccounts-response.json')]" mediaType="application/json" />
+					<munit-tools:attributes value="#[{'statusCode' :200}]" />
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+		</munit:behavior>
+		<munit:execution >
+			<munit:set-event doc:name="Set Event" doc:id="8996070e-4a13-4f7a-8d67-4926f53d76e9" >
+				<munit:payload value="#[MunitTools::getResourceAsString('requests/postAccounts-request.json')]" mediaType="application/json" />
+			</munit:set-event>
+			<flow-ref doc:name="Flow-ref to post:\accounts:application\json:mobile-accounts-eapi-config" doc:id="47010eb8-16cf-4ff9-9e64-88f00a23c89c" name="post:\accounts:application\json:mobile-accounts-eapi-config"/>
+		</munit:execution>
+		<munit:validation >
+			<munit-tools:assert-that doc:name="Assert that" doc:id="1736d5ef-0082-466e-a867-b7c5a3d66248" is="#[MunitTools::equalTo(200)]" expression="#[attributes.statusCode]"/>
+		</munit:validation>
+	</munit:test>
+	<munit:test name="api-main-test-suite-post:\accounts:application\json:mobile-accounts-errorTest" doc:id="cc7966d2-7ec9-40b1-9095-2f579672e761" description="Test" expectedErrorType="CONNECTIVITY">
+		<munit:behavior >
+			<munit-tools:mock-when doc:name="Mock when" doc:id="24029cb0-f677-405d-adf5-f0f58c419857" processor="http:request">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="POST" attributeName="method" />
+					<munit-tools:with-attribute whereValue="accounts-papi" attributeName="doc:name" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:payload value="#[MunitTools::getResourceAsString('responses/postAccounts-response.json')]" mediaType="application/json" />
+					<munit-tools:error typeId="CONNECTIVITY" />
+				</munit-tools:then-return>
+			
+</munit-tools:mock-when>
+		</munit:behavior>
+		<munit:execution >
+			<munit:set-event doc:name="Set Event" doc:id="bb59c3dd-78a4-4f28-bb6c-1871f3767cfa" >
+				<munit:payload value="#[MunitTools::getResourceAsString('requests/postAccounts-request.json')]" mediaType="application/json" />
+			</munit:set-event>
+			<flow-ref doc:name="Flow-ref to post:\accounts:application\json:mobile-accounts-eapi-config" doc:id="2e571dc0-7ddb-46c8-935c-3c83b5def266" name="post:\accounts:application\json:mobile-accounts-eapi-config"/>
+		</munit:execution>
+		<munit:validation >
+			<munit-tools:assert-that doc:name="Assert that" doc:id="3aa05f66-df1d-4e6c-a762-982edc3791bc" is="#[MunitTools::equalTo(503)]" expression="#[attributes.statusCode]"/>
+		</munit:validation>
+	</munit:test>
+
+
+</mule>

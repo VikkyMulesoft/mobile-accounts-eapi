@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:munit="http://www.mulesoft.org/schema/mule/munit" xmlns:munit-tools="http://www.mulesoft.org/schema/mule/munit-tools"
+	xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+	xsi:schemaLocation="
+		http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+		http://www.mulesoft.org/schema/mule/munit http://www.mulesoft.org/schema/mule/munit/current/mule-munit.xsd
+		http://www.mulesoft.org/schema/mule/munit-tools  http://www.mulesoft.org/schema/mule/munit-tools/current/mule-munit-tools.xsd">
+	<munit:config name="api-main-test-suite.xml" />
+	<munit:test name="api-main-test-suite-get:\accounts:mobile-accounts-successTest" doc:id="7743a8d7-4df8-4fac-bbbf-60e23e8a6725" description="Test">
+		<munit:behavior >
+			<munit-tools:mock-when doc:name="Mock when" doc:id="54f3656c-7570-42fb-bc28-bc5775c458f6" processor="http:request">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="GET" attributeName="method" />
+					<munit-tools:with-attribute whereValue="accounts-sfdc-sapi-req" attributeName="doc:name" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:payload value="#[MunitTools::getResourceAsString('responses/getAccounts-response.json')]" mediaType="application/json" />
+					<munit-tools:attributes value="#[{'statusCode' :200}]" />
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+		</munit:behavior>
+		<munit:execution >
+			<flow-ref doc:name="Flow-ref to get:\accounts:mobile-accounts-eapi-config" doc:id="f3bea8ac-6add-4a50-8ab6-63877254e0c1" name="get:\accounts:mobile-accounts-eapi-config"/>
+		</munit:execution>
+		<munit:validation >
+			<munit-tools:assert-that doc:name="Assert that" doc:id="9d988f1e-e740-4a72-8623-452f0103b777" is="#[MunitTools::equalTo(200)]" expression="#[attributes.statusCode]"/>
+		</munit:validation>
+	</munit:test>
+	<munit:test name="api-main-test-suite-get:\accounts:mobile-accounts-errorTest" doc:id="a5d78252-7c6f-40dc-88cd-df0c715468e0" description="Test" expectedErrorType="CONNECTIVITY">
+		<munit:behavior >
+			<munit-tools:mock-when doc:name="Mock when" doc:id="5a02baf9-402f-4c7b-8756-9c6060f96ef1" processor="http:request">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="GET" attributeName="method" />
+					<munit-tools:with-attribute whereValue="accounts-sfdc-sapi-req" attributeName="doc:name" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:payload value="#[MunitTools::getResourceAsString('responses/getAccounts-response.json')]" mediaType="application/json" />
+					<munit-tools:error typeId="CONNECTIVITY" />
+				</munit-tools:then-return>
+			
+</munit-tools:mock-when>
+		</munit:behavior>
+		<munit:execution >
+			<flow-ref doc:name="Flow-ref to get:\accounts:mobile-accounts-eapi-config" doc:id="eb5ff018-ea92-4048-9dd7-e4e310486e33" name="get:\accounts:mobile-accounts-eapi-config"/>
+		</munit:execution>
+		<munit:validation >
+			<munit-tools:assert-that doc:name="Assert that" doc:id="3551896f-b025-437a-8ffa-caa1b53e02f3" is="#[MunitTools::equalTo(503)]" expression="#[attributes.statusCode]"/>
+		</munit:validation>
+	</munit:test>
+
+</mule>
