@@ -4,7 +4,7 @@
 
 	<groupId>com.mycompany</groupId>
 	<artifactId>mobile-accounts-eapi</artifactId>
-	<version>1.0.0-SNAPSHOT</version>
+	<version>1.0.0</version>
 	<packaging>mule-application</packaging>
 	<name>mobile-accounts-eapi</name>
 
@@ -38,7 +38,7 @@
 						<environment>Sandbox</environment>
 						<workers>${workers}</workers>
 						<workerType>${workerType}</workerType>
-						<objectStoreV2>false</objectStoreV2>
+						<objectStoreV2>true</objectStoreV2>
 						<properties>
 							<env>${mule.env}</env>
 							<secure.key>${mule.key}</secure.key>
