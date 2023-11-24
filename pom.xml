@@ -34,7 +34,7 @@
 						<muleVersion>${app.runtime}</muleVersion>
 						<username>Vikkymuletest</username>
 						<password>Vikky@2024</password>
-						<applicationName>${applicationName}</applicationName>
+						<applicationName>mobile-accounts-sf-eapi-v1-dev</applicationName>
 						<environment>Sandbox</environment>
 						<workers>${workers}</workers>
 						<workerType>${workerType}</workerType>
