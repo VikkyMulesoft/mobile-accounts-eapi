@@ -31,14 +31,16 @@
 				<configuration>
 					<cloudHubDeployment>
 						<uri>https://anypoint.mulesoft.com</uri>
-						<muleVersion>${app.runtime}</muleVersion>
+						<muleVersion>4.4.0</muleVersion>
 						<username>Vikkymuletest</username>
 						<password>Vikky@2024</password>
 						<applicationName>mobile-accounts-sf-eapi-v1-dev</applicationName>
 						<environment>Sandbox</environment>
-						<workers>${workers}</workers>
-						<workerType>${workerType}</workerType>
+						<workers>1</workers>
+						<workerType>Micro</workerType>
 						<objectStoreV2>true</objectStoreV2>
+						<vCore>0.1</vCore>
+						<Workersize>0.1 vCores</Workersize>
 						<properties>
 							<env>${mule.env}</env>
 							<secure.key>${mule.key}</secure.key>
