@@ -31,7 +31,7 @@
 				<configuration>
 					<cloudHubDeployment>
 						<uri>https://anypoint.mulesoft.com </uri>
-						<muleVersion>4.5.2:1e</muleVersion>
+						<muleVersion>4.5.2</muleVersion>
 						<username>Vikkymuletest</username>
 						<password>Vikky@2024</password>
 						<applicationName>mobile-accounts-sf-eapi-v1-dev</applicationName>
