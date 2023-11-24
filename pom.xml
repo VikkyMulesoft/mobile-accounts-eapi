@@ -30,7 +30,6 @@
 				<extensions>true</extensions>
 				<configuration>
 					<cloudHubDeployment>
-						<anypoint.platform.base_uri>https://eu1.anypoint.mulesoft.com</anypoint.platform.base_uri>
 						<uri>https://anypoint.mulesoft.com</uri>
 						<muleVersion>4.4.0</muleVersion>
 						<username>Vikkymuletest</username>
