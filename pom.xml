@@ -38,8 +38,7 @@
 						<environment>Sandbox</environment>
 						<workers>1</workers>
 						<workerType>Micro</workerType>
-						<objectStoreV2>true</objectStoreV2>						
-						<Workersize>0.1 vCores</Workersize>
+						<objectStoreV2>true</objectStoreV2>			
 						<properties>
 							<env>${mule.env}</env>
 							<secure.key>${mule.key}</secure.key>
